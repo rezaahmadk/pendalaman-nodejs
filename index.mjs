@@ -46,8 +46,8 @@ app.post('/login', (req, res, next) => {
       return next(result.error);
     }
   
-    next()
-  }, (req, res, next) => {
+    next();
+    }, (req, res, next) => {
     //Action
     res.send(req.body);
 });
@@ -57,9 +57,26 @@ app.get('/product', async (req, res, next) => {
     res.render('product', { products });
 });
 
+app.post('/product', (req, res, next) => {
+    const schema = joi.object({
+      name: joi.string().required(),
+      price: joi.number().required(),
+      photo: joi.any().optional()
+    })
+  
+    const result = schema.validate(req.body)
+    if (result.error) {
+      return next(result.error);
+    }
+
+    next();
+    }, (req, res, next) => {
+        res.send(req.body);
+});
+
 app.use((req, res, next) => {
     return next(new Error('404: Halaman Tidak Ditemukan'));
-})
+});
   
 app.use((err, req, res, next) => {
     console.log(err.message);
