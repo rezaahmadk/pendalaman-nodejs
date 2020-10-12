@@ -34,6 +34,11 @@ app.get('/login', (req, res, next) => {
     res.render('login')
 });
 
+app.get('/product', async (req, res, next) => {
+    const products = await getProduct(db);
+    res.render('product', { products });
+});
+
 app.use((req, res, next) => {
     return next(new Error('404: Halaman Tidak Ditemukan'));
 })
@@ -43,6 +48,6 @@ app.use((err, req, res, next) => {
     res.render('default-error', { errorMessage: err.message });
 });
   
-  app.listen(7000, () => {
+app.listen(7000, () => {
     console.log('App Listen On Port 7000');
 });
