@@ -30,6 +30,10 @@ app.set('views', path.join(__dirname, '/layouts'));
 app.set('view engine', 'html');
 app.engine('html', hbs.__express);
 
+app.get('/', (req, res, next) => {
+    res.send({ success: true })
+});
+
 app.get('/login', (req, res, next) => {
     res.render('login');
 });
