@@ -57,10 +57,16 @@ app.post('/login', (req, res, next) => {
 });
 
 app.get('/product', async (req, res, next) => {
-    const products = await getProduct(db);
+    let products
+    try {
+        products = await getProduct(db)
+    } catch (error) {
+        return next(error)
+    }
     res.render('product', { products });
 });
 
+// POST Data + Foto/Gambar Menggunakan URL "/product"
 app.post('/product', (req, res, next) => {
     console.log('Request', req.body);
     console.log('File', req.files);
@@ -78,7 +84,7 @@ app.post('/product', (req, res, next) => {
 
     next();
     }, (req, res, next) => {
-        const filename = Date.now() + req.files.photo.name
+        const filename = Date.now() + req.files.photo.name;
         fs. writeFile(path.resolve(__dirname + '/files/' + filename), req.files.photo.data, (err) => {
         if (err) {
             return next(err);
@@ -88,6 +94,28 @@ app.post('/product', (req, res, next) => {
         return res.redirect('/product');
     });
 });
+
+// Handle from GET
+app.get('/add-product', (req, res, next) => {
+    res.send(req.query);
+});
+
+// POST Data + Foto/Gambar Menggunakan URL "/add-product"
+app.post('/add-product', (req, res, next) => {
+    console.log('Request', req.body);
+    console.log('File', req.files);
+    const fileName = Date.now() + req.files.photo.name;
+  
+    fs.writeFile(path.join(__dirname, '/files/', fileName), req.files.photo.data, (err) => {
+      if (err) {
+        console.error(err);
+        return
+      }
+  
+      insertProduct(db, req.body.name, parseInt(req.body.price), `/files/${fileName}`)
+      res.redirect('/product');
+    });
+  });
 
 app.use((req, res, next) => {
     return next(new Error('404: Halaman Tidak Ditemukan'));
