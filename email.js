@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer'
+import nodemailer from 'nodemailer';
 
 export function sendMailNotification(text) {
   const transporter = nodemailer.createTransport({
@@ -16,10 +16,10 @@ export function sendMailNotification(text) {
     text: text
   }, (err, info) => {
     if (err) {
-      console.error(err)
+      console.error(err);
       return
     }
 
-    console.log(info)
+    console.log(info);
   })
 }

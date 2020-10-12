@@ -1,12 +1,12 @@
-import sqlite from 'sqlite3'
+import sqlite from 'sqlite3';
 
 export function connectDB() {
   return new sqlite.Database('data', (err) => {
     if (err) {
-      throw err
+      throw err;
     }
 
-    console.log('db created')
+    console.log('DB Created');
   })
 }
 
@@ -22,7 +22,7 @@ export function initTable(db) {
       name VARCHAR(56) NOT NULL,
       price INTEGER NOT NULL
     );`)
-  })
+  });
 }
 
 /**
@@ -35,10 +35,10 @@ export function initTable(db) {
 export function insertProduct(db, name, price, photo) {
   db.run('INSERT INTO product (photo,name,price) VALUES ($photo,$name,$price)', { $photo: photo, $name: name, $price: price }, (err) => {
     if (err) {
-      throw err
+      throw err;
     }
 
-    console.log('product saved')
+    console.log('Product Saved!');
   })
 }
 
@@ -50,13 +50,13 @@ export function getProduct(db) {
   return new Promise((resolve, reject) => {
     db.all('SELECT * FROM product', (err, result) => {
       if (err) {
-        reject(err)
+        reject(err);
       }
   
       if (result) {
-        resolve(result)
+        resolve(result);
       } else {
-        resolve([])
+        resolve([]);
       }
     })
   })
@@ -71,10 +71,10 @@ export function deleteProduct(db, id) {
   return new Promise((resolve, reject) => {
     db.run('DELETE FROM product WHERE id = ?', id, (err) => {
       if(err) {
-        reject(err)
+        reject(err);
       }
 
-      resolve()
+      resolve();
     })
   })
 }

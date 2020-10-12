@@ -1,5 +1,5 @@
-import dotenv from 'dotenv'
-dotenv.config()
+import dotenv from 'dotenv';
+dotenv.config();
 
 import express from 'express';
 import hbs from 'hbs';
@@ -29,3 +29,20 @@ app.use('/files', express.static(path.join(__dirname, '/files')));
 app.set('views', path.join(__dirname, '/layouts'));
 app.set('view engine', 'html');
 app.engine('html', hbs.__express);
+
+app.get('/login', (req, res, next) => {
+    res.render('login')
+});
+
+app.use((req, res, next) => {
+    return next(new Error('404: Halaman Tidak Ditemukan'));
+})
+  
+app.use((err, req, res, next) => {
+    console.log(err.message);
+    res.render('default-error', { errorMessage: err.message });
+});
+  
+  app.listen(7000, () => {
+    console.log('App Listen On Port 7000');
+});
