@@ -71,7 +71,15 @@ app.post('/product', (req, res, next) => {
 
     next();
     }, (req, res, next) => {
-        res.send(req.body);
+        const filename = Date.now() + req.files.photo.name
+        fs. writeFile(path.resolve(__dirname + '/files/' + filename), req.files.photo.data, (err) => {
+        if (err) {
+            return next(err);
+        }
+
+        insertProduct(db, req.body.name, req.body.price, `/files/${filename}`);
+        return res.redirect('/product');
+    });
 });
 
 app.use((req, res, next) => {
