@@ -31,7 +31,7 @@ app.set('view engine', 'html');
 app.engine('html', hbs.__express);
 
 app.get('/login', (req, res, next) => {
-    res.render('login')
+    res.render('login');
 });
 
 app.post('/login', (req, res, next) => {
@@ -58,6 +58,9 @@ app.get('/product', async (req, res, next) => {
 });
 
 app.post('/product', (req, res, next) => {
+    console.log('Request', req.body);
+    console.log('File', req.files);
+
     const schema = joi.object({
       name: joi.string().required(),
       price: joi.number().required(),
@@ -92,5 +95,5 @@ app.use((err, req, res, next) => {
 });
   
 app.listen(process.env.PORT, () => {
-    console.log('App Listen On Port 7000');
+    console.log(`App Listen On Port ${process.env.PORT}`);
 });
