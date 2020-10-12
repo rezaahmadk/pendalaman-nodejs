@@ -34,6 +34,24 @@ app.get('/login', (req, res, next) => {
     res.render('login')
 });
 
+app.post('/login', (req, res, next) => {
+    //Form Validation
+    const schema = joi.object({
+      email: joi.string().email().required(),
+      password: joi.string().required()
+    })
+  
+    const result = schema.validate(req.body);
+    if(result.error) {
+      return next(result.error);
+    }
+  
+    next()
+  }, (req, res, next) => {
+    //Action
+    res.send(req.body);
+});
+
 app.get('/product', async (req, res, next) => {
     const products = await getProduct(db);
     res.render('product', { products });
@@ -48,6 +66,6 @@ app.use((err, req, res, next) => {
     res.render('default-error', { errorMessage: err.message });
 });
   
-app.listen(7000, () => {
+app.listen(process.env.PORT, () => {
     console.log('App Listen On Port 7000');
 });
